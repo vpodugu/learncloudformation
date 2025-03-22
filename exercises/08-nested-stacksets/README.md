@@ -1,36 +1,32 @@
-## **Bonus Task 2: Multi-Tier Architecture with Nested Stacks**
+# Multi-Tier Architecture with Nested Stacks
 
-## **📌 Objective**
-Use **Nested Stacks** to break down large CloudFormation templates into modular, reusable components.
+## Overview
+In this bonus task, we'll explore how to use Nested Stacks to break down large CloudFormation templates into modular, reusable components. This approach helps manage complex infrastructure more effectively.
 
----
+## Why Nested Stacks Matter
+- **Modularity**: Break complex infrastructure into smaller, manageable stacks
+- **Reusability**: Create templates that can be reused across different projects
+- **Scalability**: Update individual components without redeploying everything
 
-## **🔹 Why Use Nested Stacks?**
-✅ **Modularity** – Break complex infrastructure into smaller, manageable stacks.
-✅ **Reusability** – Define templates that can be reused across projects.
-✅ **Scalability** – Update individual components without redeploying the entire infrastructure.
+## Understanding Nested Stacks
+Nested Stacks work through three main components:
+1. A Parent Stack that serves as the main template
+2. Child Stacks that are deployed by the parent
+3. Stack references that connect everything together
 
----
+## Implementation Guide
 
-## **🔹 How Nested Stacks Work**
-1️⃣ **Parent Stack** – The main CloudFormation template that references other stacks.
-2️⃣ **Child Stacks** – Independent stacks deployed by the parent stack.
-3️⃣ **Nested Stack Calls** – The parent stack invokes child stacks using the `AWS::CloudFormation::Stack` resource.
+### Step 1: Create the Parent Stack
+First, we'll modify `exercises/08-bonus-nestedstacks/parent-stack.yaml` to define our main application stack.
 
----
+### Step 2: Set Up Child Stacks
+In the `exercises/08-bonus-nestedstacks/` directory, we'll create three separate templates:
+- `network-stack.yaml` for VPC, Subnets, and Route Tables
+- `compute-stack.yaml` for EC2, ECS, or Lambda resources
+- `database-stack.yaml` for RDS or DynamoDB
 
-## **🛠 Steps to Implement Nested Stacks**
-### **1️⃣ Write a Parent Stack Template**
-Modify `exercises/08-bonus-nestedstacks/parent-stack.yaml` to define the main application stack.
-
-### **2️⃣ Define Child Stack Templates**
-Inside `exercises/08-bonus-nestedstacks/`, create:
-- `network-stack.yaml` – Defines VPC, Subnets, and Route Tables.
-- `compute-stack.yaml` – Deploys EC2, ECS, or Lambda.
-- `database-stack.yaml` – Provisions RDS or DynamoDB.
-
-### **3️⃣ Link Nested Stacks in the Parent Stack**
-In `parent-stack.yaml`, reference the child stacks:
+### Step 3: Connect the Stacks
+In `parent-stack.yaml`, we'll reference our child stacks like this:
 ```yaml
 Resources:
   NetworkStack:
@@ -55,18 +51,17 @@ Resources:
         DBEngine: "mysql"
 ```
 
-### **4️⃣ Deploy the Parent Stack**
-Run the following AWS CLI command:
+### Step 4: Deploy Your Stack
+Run this command to create your multi-tier architecture:
 ```sh
 aws cloudformation create-stack --stack-name MultiTierArchitecture \
   --template-body file://parent-stack.yaml \
   --capabilities CAPABILITY_NAMED_IAM
 ```
 
-### **5️⃣ Validate Nested Stack Deployment**
-Check stack creation logs:
+### Step 5: Check the Deployment
+Monitor your stack creation with:
 ```sh
 aws cloudformation describe-stacks --stack-name MultiTierArchitecture
 ```
-
----
+This will show you the status of both the parent and child stacks.
