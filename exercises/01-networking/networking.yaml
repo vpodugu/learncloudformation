@@ -1,0 +1,31 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: "CloudFormation Template to create a VPC with Public & Private Subnets"
+
+Resources:
+  MyVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: MyVPC
+
+  # TODO: Add a second public subnet in another AZ
+
+  # TODO: Add a second private subnet in another AZ
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+
+  AttachIGW:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref MyVPC
+      InternetGatewayId: !Ref InternetGateway
+
+Outputs:
+  VPCId:
+    Description: "VPC ID"
+    Value: !Ref MyVPC

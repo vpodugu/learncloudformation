@@ -24,9 +24,20 @@ Resources:
     Type: AWS::ECS::Cluster
     Properties: {}
 
-  # TODO: Add a Fargate task definition that runs a web server
-
-  # TODO: Define an auto-scaling policy for ECS tasks based on CPU utilization
+  FargateTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: "MyTask"
+      Cpu: "256"
+      Memory: "512"
+      NetworkMode: awsvpc
+      ExecutionRoleArn: !Ref ECSExecutionRole
+      ContainerDefinitions:
+        - Name: "MyAppContainer"
+          Image: "public.ecr.aws/nginx/nginx:latest"
+          PortMappings:
+            - ContainerPort: 80
+              HostPort: 80
 
 Outputs:
   LambdaFunctionName:

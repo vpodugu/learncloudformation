@@ -6,15 +6,17 @@ Resources:
     Type: AWS::SQS::Queue
     Properties:
       QueueName: "MyAppQueue"
+      RedrivePolicy:
+        deadLetterTargetArn: !GetAtt DeadLetterQueue.Arn
+        maxReceiveCount: 5
+
+  DeadLetterQueue:
+    Type: AWS::SQS::Queue
 
   MySNSTopic:
     Type: AWS::SNS::Topic
     Properties:
       DisplayName: "AppNotifications"
-
-  # TODO: Configure an SQS dead-letter queue (DLQ) for failed messages
-
-  # TODO: Add an SNS subscription that sends email notifications
 
 Outputs:
   SQSQueue:

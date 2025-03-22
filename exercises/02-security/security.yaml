@@ -1,0 +1,29 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: "CloudFormation Template to create Security Groups and IAM Role"
+
+Resources:
+  WebSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Allow HTTP and SSH access"
+      VpcId: !ImportValue VPCId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+
+  # TODO: Restrict SSH (22) to a specific IP address instead of allowing all
+
+  # TODO: Create a security group for RDS that only allows traffic from the web security group
+
+  # TODO: Add IAM policies to restrict S3 bucket access to EC2 only
+
+Outputs:
+  SecurityGroupId:
+    Description: "Security Group ID"
+    Value: !Ref WebSecurityGroup

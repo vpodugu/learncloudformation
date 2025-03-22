@@ -23,11 +23,8 @@ Resources:
       AllocatedStorage: 20
       MasterUsername: admin
       MasterUserPassword: Password123!
-      PubliclyAccessible: false
-
-  # TODO: Modify RDS to use a multi-AZ deployment for high availability
-
-  # TODO: Add a backup retention policy for the RDS instance
+      MultiAZ: true  # Enabled Multi-AZ
+      BackupRetentionPeriod: 7
 
 Outputs:
   DynamoDBTable:

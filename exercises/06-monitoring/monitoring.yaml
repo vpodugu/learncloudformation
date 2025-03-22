@@ -1,0 +1,31 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: "CloudFormation Template to configure CloudWatch Alarms"
+
+Resources:
+  LambdaErrorAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: "LambdaErrorAlarm"
+      ComparisonOperator: GreaterThanThreshold
+      EvaluationPeriods: 1
+      MetricName: Errors
+      Namespace: AWS/Lambda
+      Period: 60
+      Statistic: Sum
+      Threshold: 5
+      AlarmActions:
+        - !Ref MySNSTopic
+
+  MySNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: "CloudWatch Alerts"
+
+  # TODO: Add a CloudWatch metric to monitor CPU utilization of ECS containers
+
+  # TODO: Create an alert for API Gateway latency exceeding 1 second
+
+Outputs:
+  CloudWatchAlarm:
+    Description: "CloudWatch Alarm Name"
+    Value: !Ref LambdaErrorAlarm

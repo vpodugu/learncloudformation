@@ -1,0 +1,65 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: "CloudFormation Template to configure CloudWatch Alarms and Logs"
+
+Resources:
+  CloudWatchLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: "/ecs/my-app"
+      RetentionInDays: 7
+
+  LambdaErrorAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: "LambdaErrorAlarm"
+      ComparisonOperator: GreaterThanThreshold
+      EvaluationPeriods: 1
+      MetricName: Errors
+      Namespace: AWS/Lambda
+      Period: 60
+      Statistic: Sum
+      Threshold: 5
+      AlarmActions:
+        - !Ref MySNSTopic
+
+  ECSCPUUtilizationAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: "ECSCPUUtilizationAlarm"
+      ComparisonOperator: GreaterThanThreshold
+      EvaluationPeriods: 2
+      MetricName: CPUUtilization
+      Namespace: AWS/ECS
+      Period: 60
+      Statistic: Average
+      Threshold: 75
+      AlarmActions:
+        - !Ref MySNSTopic
+
+  APIGatewayLatencyAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: "APIGatewayLatencyAlarm"
+      ComparisonOperator: GreaterThanThreshold
+      EvaluationPeriods: 1
+      MetricName: Latency
+      Namespace: AWS/ApiGateway
+      Period: 60
+      Statistic: Average
+      Threshold: 1000  # 1 second
+      AlarmActions:
+        - !Ref MySNSTopic
+
+  MySNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: "CloudWatch Alerts"
+
+Outputs:
+  CloudWatchAlarms:
+    Description: "List of CloudWatch Alarms"
+    Value: "LambdaErrorAlarm, ECSCPUUtilizationAlarm, APIGatewayLatencyAlarm"
+
+  LogGroupName:
+    Description: "CloudWatch Log Group for ECS"
+    Value: !Ref CloudWatchLogGroup
