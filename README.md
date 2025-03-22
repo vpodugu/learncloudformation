@@ -101,17 +101,8 @@ Follow similar steps for:
 
 ---
 
-## **📩 Submission Instructions**
-1. **Fork the GitHub repo** and create a branch.  
-2. Push your completed CloudFormation templates to `answers/`.  
-3. Open a **Pull Request (PR)** with a **README** explaining what you built.  
-4. Share the **CloudFormation Stack Names** and **outputs** in the PR description.  
-
----
-
 ## **🚀 Bonus Challenges**
 🔹 **Use StackSets to deploy resources across multiple regions**  
-🔹 **Integrate AWS CodePipeline to automate CloudFormation deployments**  
 🔹 **Deploy a multi-tier architecture using Nested Stacks**  
 
 🎯 **Goal:** By completing this, you will **master AWS CloudFormation** and **deploy full-stack cloud applications like a pro!** 🚀
